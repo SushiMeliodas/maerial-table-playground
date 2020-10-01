@@ -104,7 +104,7 @@ function TableMui() {
   return (
     <div>
       <MaterialTable
-        title="Cell Editable Preview"
+        title='Cell Editable Preview'
         columns={tableColumns}
         data={tableData}
         actions={tableActions}
@@ -112,52 +112,52 @@ function TableMui() {
           selection: true,
           actionsColumnIndex: -1,
         }}
-        components={{
-          Action: (props) => {
-            if (props.action.icon === 'target') {
-              return (
-                <Button
-                  onClick={(event) => props.action.onClick(event, props.data)}
-                  color={PRIMARY}
-                  variant={OUTLINED}
-                  style={{ textTransform: 'none' }}
-                  size="small"
-                  className={classes.btnAction}
-                >
-                  指名
-                </Button>
-              );
-            }
-            if (props.action.icon === 'reject') {
-              return (
-                <Button
-                  onClick={(event) => props.action.onClick(event, props.data)}
-                  color={PRIMARY}
-                  variant={OUTLINED}
-                  style={{ textTransform: 'none' }}
-                  size="small"
-                  className={classes.btnAction}
-                >
-                  退勤
-                </Button>
-              );
-            }
-            if (props.action.icon === 'delete') {
-              return (
-                <Button
-                  onClick={(event) => props.action.onClick(event, props.data)}
-                  color={PRIMARY}
-                  variant={OUTLINED}
-                  style={{ textTransform: 'none' }}
-                  size="small"
-                  className={classes.btnAction}
-                >
-                  消除
-                </Button>
-              );
-            }
-          },
-        }}
+        // components={{
+        //   Action: (props) => {
+        //     if (props.action.icon === 'target') {
+        //       return (
+        //         <Button
+        //           onClick={(event) => props.action.onClick(event, props.data)}
+        //           color={PRIMARY}
+        //           variant={OUTLINED}
+        //           style={{ textTransform: 'none' }}
+        //           size="small"
+        //           className={classes.btnAction}
+        //         >
+        //           指名
+        //         </Button>
+        //       );
+        //     }
+        //     if (props.action.icon === 'reject') {
+        //       return (
+        //         <Button
+        //           onClick={(event) => props.action.onClick(event, props.data)}
+        //           color={PRIMARY}
+        //           variant={OUTLINED}
+        //           style={{ textTransform: 'none' }}
+        //           size="small"
+        //           className={classes.btnAction}
+        //         >
+        //           退勤
+        //         </Button>
+        //       );
+        //     }
+        //     if (props.action.icon === 'delete') {
+        //       return (
+        //         <Button
+        //           onClick={(event) => props.action.onClick(event, props.data)}
+        //           color={PRIMARY}
+        //           variant={OUTLINED}
+        //           style={{ textTransform: 'none' }}
+        //           size="small"
+        //           className={classes.btnAction}
+        //         >
+        //           消除
+        //         </Button>
+        //       );
+        //     }
+        //   },
+        // }}
         cellEditable={{
           onCellEditApproved: (newValue) => {
             return new Promise((resolve) => {
