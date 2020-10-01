@@ -11,6 +11,7 @@ import useStyles from '../styles/AppStyles';
 import Alert from '@material-ui/lab/Alert';
 
 interface Data {
+  tableData: any;
   product_id: number;
   product_name: string;
   product_type: string;
@@ -25,6 +26,24 @@ interface DataVar {
   resolve: void;
 }
 
+type CType =
+  | 'string'
+  | 'boolean'
+  | 'numeric'
+  | 'date'
+  | 'datetime'
+  | 'time'
+  | 'currency';
+const STRING: CType = 'string';
+const NUMERIC: CType = 'numeric';
+const DATETIME: CType = 'datetime';
+
+type CEdit = 'always' | 'never' | 'onUpdate' | 'onAdd';
+const NEVER: CEdit = 'never';
+
+type CAlign = 'center' | 'inherit' | 'justify' | 'left' | 'right';
+const LEFT: CAlign = 'left';
+
 const API = axios.create({
   baseURL: `http://localhost/my-app-rest-api/public/api`,
 });
@@ -32,32 +51,53 @@ const API = axios.create({
 const TableM = () => {
   const classes = useStyles();
 
-  let columns = [
-    { title: 'id', field: 'product_id' },
-    { title: 'Name', field: 'product_name' },
-    { title: 'Type', field: 'product_type' },
-    { title: 'email', field: 'product_quantity' },
-    { title: 'Date 1', field: 'created_at', type: 'datetime' },
-    { title: 'Date 2', field: 'updated_at', type: 'datetime' },
-  ];
-  const [data, setData] = useState([]); //table data
+  const [tableColumns] = useState([
+    {
+      title: 'id',
+      field: 'product_id',
+      type: NUMERIC,
+      align: LEFT,
+      editable: NEVER,
+    },
+    { title: 'Name', field: 'product_name', type: STRING },
+    { title: 'Type', field: 'product_type', type: STRING },
+    {
+      title: 'Quantity',
+      field: 'product_quantity',
+      type: NUMERIC,
+      align: LEFT,
+    },
+    { title: 'Date 1', field: 'created_at', type: DATETIME },
+    { title: 'Date 2', field: 'updated_at', type: DATETIME },
+  ]);
+  const [tableData, setTableData] = useState([]); //table data
 
   //for error handling
   const [iserror, setIserror] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => {
+    getTableData();
+  }, []);
+
+  const getTableData = () => {
     API.get('/product')
       .then((res) => {
-        setData(res.data.data);
+        // setTableData(res.data.data);
+        setTableData(res.data);
+        console.log(res);
       })
       .catch((error) => {
         console.log('Error');
       });
-  }, []);
+  };
 
   //Update
-  const handleRowUpdate = (newData: Data, { oldData, resolve }: DataVar) => {
+  const handleRowUpdate = (
+    newData: Data,
+    oldData: Data,
+    resolve: { (value?: any): void; (): void }
+  ) => {
     //validation
     let errorList = [];
     if (newData.product_name === '') {
@@ -76,10 +116,11 @@ const TableM = () => {
     if (errorList.length < 1) {
       API.patch('/product/' + newData.product_id, newData)
         .then((res) => {
-          const dataUpdate = [...data];
+          const dataUpdate: any[] = [...tableData];
           const index = oldData.tableData.product_id;
           dataUpdate[index] = newData;
-          setData([...dataUpdate]);
+          setTableData([...dataUpdate] as any);
+          getTableData();
           resolve();
           setIserror(false);
           setErrorMessages([]);
@@ -117,9 +158,10 @@ const TableM = () => {
       //no error
       API.post('/product', newData)
         .then((res) => {
-          let dataToAdd = [...data];
+          let dataToAdd: Data[] = [...tableData];
           dataToAdd.push(newData);
-          setData(dataToAdd);
+          setTableData(dataToAdd as any);
+          getTableData();
           resolve();
           setErrorMessages([]);
           setIserror(false);
@@ -140,10 +182,11 @@ const TableM = () => {
   const handleRowDelete = (oldData: Data, resolve: () => void) => {
     API.delete('/product/' + oldData.product_id)
       .then((res) => {
-        const dataDelete = [...data];
+        const dataDelete = [...tableData];
         const index = oldData.tableData.product_id;
         dataDelete.splice(index, 1);
-        setData([...dataDelete]);
+        setTableData([...dataDelete]);
+        getTableData();
         resolve();
       })
       .catch((error) => {
@@ -156,15 +199,15 @@ const TableM = () => {
   return (
     <div>
       <Container>
-        <Box mt='10px' pt='20px'>
+        <Box mt="10px" pt="20px">
           <Card className={classes.tableCard}>
-            <Box m='0.5em' p='0.5em'>
-              <Typography variant='h4' component='h2'>
+            <Box m="0.5em" p="0.5em">
+              <Typography variant="h4" component="h2">
                 TableList Component
               </Typography>
               <div>
                 {iserror && (
-                  <Alert severity='error'>
+                  <Alert severity="error">
                     {errorMessages.map((msg, i) => {
                       return <div key={i}>{msg}</div>;
                     })}
@@ -172,14 +215,14 @@ const TableM = () => {
                 )}
               </div>
               <MaterialTable
-                title='User data from remote source'
-                columns={columns}
-                data={data}
+                title="User data from remote source"
+                columns={tableColumns}
+                data={tableData}
                 // icons={tableIcons}
                 editable={{
                   onRowUpdate: (newData, oldData) =>
                     new Promise((resolve) => {
-                      handleRowUpdate(newData, oldData, resolve);
+                      handleRowUpdate(newData, oldData as any, resolve);
                     }),
                   onRowAdd: (newData) =>
                     new Promise((resolve) => {
@@ -189,6 +232,9 @@ const TableM = () => {
                     new Promise((resolve) => {
                       handleRowDelete(oldData, resolve);
                     }),
+                }}
+                options={{
+                  actionsColumnIndex: -1,
                 }}
               />
             </Box>
