@@ -8,6 +8,8 @@ import axios from 'axios';
 //import Custom Material Styles
 import useStyles from '../styles/AppStyles';
 
+import Alert from '@material-ui/lab/Alert';
+
 interface Data {
   product_id: number;
   product_name: string;
@@ -83,12 +85,12 @@ const TableM = () => {
           setErrorMessages([]);
         })
         .catch((error) => {
-          setErrorMessages(['Update failed! Server error']);
+          setErrorMessages(['Update failed! Server error'] as any);
           setIserror(true);
           resolve();
         });
     } else {
-      setErrorMessages(errorList);
+      setErrorMessages(errorList as any);
       setIserror(true);
       resolve();
     }
@@ -123,12 +125,12 @@ const TableM = () => {
           setIserror(false);
         })
         .catch((error) => {
-          setErrorMessages(['Cannot add data. Server error!']);
+          setErrorMessages(['Cannot add data. Server error!'] as any);
           setIserror(true);
           resolve();
         });
     } else {
-      setErrorMessages(errorList);
+      setErrorMessages(errorList as any);
       setIserror(true);
       resolve();
     }
@@ -145,7 +147,7 @@ const TableM = () => {
         resolve();
       })
       .catch((error) => {
-        setErrorMessages(['Delete failed! Server error']);
+        setErrorMessages(['Delete failed! Server error'] as any);
         setIserror(true);
         resolve();
       });
@@ -173,7 +175,7 @@ const TableM = () => {
                 title='User data from remote source'
                 columns={columns}
                 data={data}
-                icons={tableIcons}
+                // icons={tableIcons}
                 editable={{
                   onRowUpdate: (newData, oldData) =>
                     new Promise((resolve) => {
