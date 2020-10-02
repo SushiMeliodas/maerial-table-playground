@@ -9,6 +9,8 @@ import axios from 'axios';
 import useStyles from '../styles/AppStyles';
 
 import Alert from '@material-ui/lab/Alert';
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 interface Data {
   tableData: any;
@@ -16,6 +18,7 @@ interface Data {
   product_name: string;
   product_type: string;
   product_quantity: string;
+  product_datetime: Date;
   created_at: Date;
   updated_at: Date;
 }
@@ -37,6 +40,8 @@ type CType =
 const STRING: CType = 'string';
 const NUMERIC: CType = 'numeric';
 const DATETIME: CType = 'datetime';
+// const TIME: CType = 'time';
+const DATE: CType = 'date';
 
 type CEdit = 'always' | 'never' | 'onUpdate' | 'onAdd';
 const NEVER: CEdit = 'never';
@@ -67,8 +72,33 @@ const TableM = () => {
       type: NUMERIC,
       align: LEFT,
     },
-    { title: 'Date 1', field: 'created_at', type: DATETIME },
-    { title: 'Date 2', field: 'updated_at', type: DATETIME },
+    {
+      title: 'Date 0',
+      field: 'product_datetime',
+      type: DATE,
+      render: ({ product_datetime }: Data) => product_datetime,
+      editComponent: (props: any) => (
+        <MuiPickersUtilsProvider
+          utils={DateFnsUtils}
+          locale={props.dateTimePickerLocalization}
+        >
+          <DateTimePicker
+            ampm={false}
+            format='yyyy/MM/dd HH:mm:ss'
+            value={props.value || null}
+            onChange={props.onChange}
+            clearable
+            InputProps={{
+              style: {
+                fontSize: 13,
+              },
+            }}
+          />
+        </MuiPickersUtilsProvider>
+      ),
+    },
+    { title: 'Date 1', field: 'created_at', type: DATETIME, editable: NEVER },
+    { title: 'Date 2', field: 'updated_at', type: DATETIME, editable: NEVER },
   ]);
   const [tableData, setTableData] = useState([]); //table data
 
@@ -121,6 +151,7 @@ const TableM = () => {
           dataUpdate[index] = newData;
           setTableData([...dataUpdate] as any);
           getTableData();
+          console.log(res);
           resolve();
           setIserror(false);
           setErrorMessages([]);
@@ -161,13 +192,16 @@ const TableM = () => {
           let dataToAdd: Data[] = [...tableData];
           dataToAdd.push(newData);
           setTableData(dataToAdd as any);
+          // setTableData(dataToAdd.concat(res.data) as any);
           getTableData();
+          console.log(res);
           resolve();
           setErrorMessages([]);
           setIserror(false);
         })
-        .catch((error) => {
+        .catch((err) => {
           setErrorMessages(['Cannot add data. Server error!'] as any);
+          console.log(err);
           setIserror(true);
           resolve();
         });
@@ -187,6 +221,7 @@ const TableM = () => {
         dataDelete.splice(index, 1);
         setTableData([...dataDelete]);
         getTableData();
+        console.log(res);
         resolve();
       })
       .catch((error) => {
@@ -199,15 +234,15 @@ const TableM = () => {
   return (
     <div>
       <Container>
-        <Box mt="10px" pt="20px">
+        <Box mt='10px' pt='20px'>
           <Card className={classes.tableCard}>
-            <Box m="0.5em" p="0.5em">
-              <Typography variant="h4" component="h2">
+            <Box m='0.5em' p='0.5em'>
+              <Typography variant='h4' component='h2'>
                 TableList Component
               </Typography>
               <div>
                 {iserror && (
-                  <Alert severity="error">
+                  <Alert severity='error'>
                     {errorMessages.map((msg, i) => {
                       return <div key={i}>{msg}</div>;
                     })}
@@ -215,10 +250,9 @@ const TableM = () => {
                 )}
               </div>
               <MaterialTable
-                title="User data from remote source"
+                title='Material-Table data'
                 columns={tableColumns}
                 data={tableData}
-                // icons={tableIcons}
                 editable={{
                   onRowUpdate: (newData, oldData) =>
                     new Promise((resolve) => {
