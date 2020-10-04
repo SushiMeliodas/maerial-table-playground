@@ -10,6 +10,7 @@ import useStyles from '../styles/AppStyles';
 
 import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 import DateFnsUtils from '@date-io/date-fns';
 
 interface Data {
@@ -75,16 +76,22 @@ const TableM = () => {
     {
       title: 'Date 0',
       field: 'product_datetime',
-      type: DATE,
-      render: ({ product_datetime }: Data) => product_datetime,
+      // type: DATE,
+      render: ({ product_datetime }: Data) => `${product_datetime}`,
+      // editComponent: (props: any) => (
       editComponent: (props: any) => (
         <MuiPickersUtilsProvider
           utils={DateFnsUtils}
-          locale={props.dateTimePickerLocalization}
+          // locale={props.dateTimePickerLocalization}
         >
           <DateTimePicker
+            autoOk
             ampm={false}
-            format='yyyy/MM/dd HH:mm:ss'
+            variant="inline"
+            margin="normal"
+            // format='yyyy/MM/dd HH:mm:ss'
+            format="yyyy-MM-dd HH:mm:ss"
+            // format="YYYY-MM-DD hh:mm:ss" //Moment type
             value={props.value || null}
             onChange={props.onChange}
             clearable
@@ -158,6 +165,7 @@ const TableM = () => {
         })
         .catch((error) => {
           setErrorMessages(['Update failed! Server error'] as any);
+          console.log(newData);
           setIserror(true);
           resolve();
         });
@@ -201,6 +209,7 @@ const TableM = () => {
         })
         .catch((err) => {
           setErrorMessages(['Cannot add data. Server error!'] as any);
+          console.log(newData);
           console.log(err);
           setIserror(true);
           resolve();
@@ -234,15 +243,15 @@ const TableM = () => {
   return (
     <div>
       <Container>
-        <Box mt='10px' pt='20px'>
+        <Box mt="10px" pt="20px">
           <Card className={classes.tableCard}>
-            <Box m='0.5em' p='0.5em'>
-              <Typography variant='h4' component='h2'>
+            <Box m="0.5em" p="0.5em">
+              <Typography variant="h4" component="h2">
                 TableList Component
               </Typography>
               <div>
                 {iserror && (
-                  <Alert severity='error'>
+                  <Alert severity="error">
                     {errorMessages.map((msg, i) => {
                       return <div key={i}>{msg}</div>;
                     })}
@@ -250,7 +259,7 @@ const TableM = () => {
                 )}
               </div>
               <MaterialTable
-                title='Material-Table data'
+                title="Material-Table data"
                 columns={tableColumns}
                 data={tableData}
                 editable={{
