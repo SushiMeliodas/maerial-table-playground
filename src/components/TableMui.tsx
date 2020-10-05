@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { type } from 'os';
+import { CType } from '../types/Tstypes';
 
 const useStyles = makeStyles({
   btnAction: {
@@ -13,15 +14,6 @@ const useStyles = makeStyles({
 
 const url = 'http://localhost/my-app-rest-api/public/api/product';
 
-//Declare type in Table Columns
-type CType =
-  | 'string'
-  | 'boolean'
-  | 'numeric'
-  | 'date'
-  | 'datetime'
-  | 'time'
-  | 'currency';
 const STRING: CType = 'string';
 const NUMERIC: CType = 'numeric';
 const DATETIME: CType = 'datetime';
@@ -121,7 +113,7 @@ function TableMui() {
         //           color={PRIMARY}
         //           variant={OUTLINED}
         //           style={{ textTransform: 'none' }}
-        //           size="small"
+        //           size='small'
         //           className={classes.btnAction}
         //         >
         //           指名
@@ -135,7 +127,7 @@ function TableMui() {
         //           color={PRIMARY}
         //           variant={OUTLINED}
         //           style={{ textTransform: 'none' }}
-        //           size="small"
+        //           size='small'
         //           className={classes.btnAction}
         //         >
         //           退勤
@@ -149,7 +141,7 @@ function TableMui() {
         //           color={PRIMARY}
         //           variant={OUTLINED}
         //           style={{ textTransform: 'none' }}
-        //           size="small"
+        //           size='small'
         //           className={classes.btnAction}
         //         >
         //           消除

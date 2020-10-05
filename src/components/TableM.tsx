@@ -1,72 +1,79 @@
 import React, { useState, useEffect } from 'react';
 //import Material Components
-import { Card, Box, Container, Typography } from '@material-ui/core';
+import { Card, Box, Container, Button } from '@material-ui/core';
 //import Material-Table library
 import MaterialTable from 'material-table';
 // import API library
 import axios from 'axios';
 //import Custom Material Styles
 import useStyles from '../styles/AppStyles';
-
+//import Alert for Validation Message
 import Alert from '@material-ui/lab/Alert';
-import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
-import DateFnsUtils from '@date-io/date-fns';
+//import for DatetimePicker related
+import {
+  MuiPickersUtilsProvider,
+  DateTimePicker,
+  TimePicker,
+} from '@material-ui/pickers';
+import { format } from 'date-fns'; //Formater for date
+import DateFnsUtils from '@date-io/date-fns'; //Formater for DatetimePicker
+import {
+  CAlign,
+  CEdit,
+  CType,
+  Data,
+  CButtonColor,
+  CButtonVariant,
+} from '../types/Tstypes';
 
-interface Data {
-  tableData: any;
-  product_id: number;
-  product_name: string;
-  product_type: string;
-  product_quantity: string;
-  product_datetime: Date;
-  created_at: Date;
-  updated_at: Date;
-}
+// interface DataVar {
+//   newData: Data[];
+//   oldData: string;
+//   resolve: void;
+// }
 
-interface DataVar {
-  newData: Data[];
-  oldData: string;
-  resolve: void;
-}
-
-type CType =
-  | 'string'
-  | 'boolean'
-  | 'numeric'
-  | 'date'
-  | 'datetime'
-  | 'time'
-  | 'currency';
+//Collumns string type
 const STRING: CType = 'string';
 const NUMERIC: CType = 'numeric';
 const DATETIME: CType = 'datetime';
-// const TIME: CType = 'time';
-const DATE: CType = 'date';
+const TIME: CType = 'time';
+// const DATE: CType = 'date';
 
-type CEdit = 'always' | 'never' | 'onUpdate' | 'onAdd';
+//Collumns Edit string type
 const NEVER: CEdit = 'never';
-
-type CAlign = 'center' | 'inherit' | 'justify' | 'left' | 'right';
+//Collumns align string type
 const LEFT: CAlign = 'left';
+//Button string type
+const PRIMARY: CButtonColor = 'primary';
+const OUTLINED: CButtonVariant = 'outlined';
 
+//Declare API url here
 const API = axios.create({
   baseURL: `http://localhost/my-app-rest-api/public/api`,
 });
 
+//Format Date here before send to API server
+Date.prototype.toJSON = function () {
+  // you can use moment or anything else you prefer to format
+  // the date here
+  return format(this, 'yyyy/MM/dd HH:mm:ss');
+};
+
 const TableM = () => {
+  //Declaration for Material Styles
   const classes = useStyles();
 
+  //Table Collumn here
   const [tableColumns] = useState([
     {
-      title: 'id',
+      title: 'ID',
       field: 'product_id',
       type: NUMERIC,
       align: LEFT,
       editable: NEVER,
     },
-    { title: 'Name', field: 'product_name', type: STRING },
-    { title: 'Type', field: 'product_type', type: STRING },
+    { title: 'キャスト名', field: 'product_name', type: STRING },
+    { title: '区分', field: 'product_type', type: STRING },
     {
       title: 'Quantity',
       field: 'product_quantity',
@@ -74,24 +81,22 @@ const TableM = () => {
       align: LEFT,
     },
     {
-      title: 'Date 0',
+      title: '予定時間',
       field: 'product_datetime',
-      // type: DATE,
-      render: ({ product_datetime }: Data) => `${product_datetime}`,
-      // editComponent: (props: any) => (
+      type: TIME,
+      // render: ({ product_datetime }: Data) => product_datetime,
       editComponent: (props: any) => (
         <MuiPickersUtilsProvider
           utils={DateFnsUtils}
-          // locale={props.dateTimePickerLocalization}
+          locale={props.dateTimePickerLocalization}
         >
           <DateTimePicker
             autoOk
             ampm={false}
-            variant="inline"
-            margin="normal"
+            variant='inline'
+            margin='normal'
+            format='HH:mm:ss'
             // format='yyyy/MM/dd HH:mm:ss'
-            format="yyyy-MM-dd HH:mm:ss"
-            // format="YYYY-MM-DD hh:mm:ss" //Moment type
             value={props.value || null}
             onChange={props.onChange}
             clearable
@@ -113,14 +118,15 @@ const TableM = () => {
   const [iserror, setIserror] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
+  //Refresh everytime when getTableData is called
   useEffect(() => {
     getTableData();
   }, []);
 
+  //Get data list here
   const getTableData = () => {
     API.get('/product')
       .then((res) => {
-        // setTableData(res.data.data);
         setTableData(res.data);
         console.log(res);
       })
@@ -129,7 +135,7 @@ const TableM = () => {
       });
   };
 
-  //Update
+  //Update Function PUT
   const handleRowUpdate = (
     newData: Data,
     oldData: Data,
@@ -176,7 +182,7 @@ const TableM = () => {
     }
   };
 
-  //Create
+  //Create Function POST
   const handleRowAdd = (newData: Data, resolve: () => void) => {
     //validation
     let errorList = [];
@@ -221,37 +227,86 @@ const TableM = () => {
     }
   };
 
-  //Delete
-  const handleRowDelete = (oldData: Data, resolve: () => void) => {
-    API.delete('/product/' + oldData.product_id)
-      .then((res) => {
-        const dataDelete = [...tableData];
-        const index = oldData.tableData.product_id;
-        dataDelete.splice(index, 1);
-        setTableData([...dataDelete]);
-        getTableData();
-        console.log(res);
-        resolve();
-      })
-      .catch((error) => {
-        setErrorMessages(['Delete failed! Server error'] as any);
-        setIserror(true);
-        resolve();
-      });
+  //Delete function DELETE
+  const handleRowDelete = (oldData: any, resolve: () => void) => {
+    for (const [index, value] of oldData.entries()) {
+      API.delete('/product/' + value.product_id)
+        .then((res) => {
+          const dataDelete = [...tableData];
+          const index = oldData.product_id;
+          dataDelete.splice(index, 1);
+          setTableData([...dataDelete]);
+          getTableData();
+          console.log(res);
+          resolve();
+        })
+        .catch((error) => {
+          setErrorMessages(['Delete failed! Server error'] as any);
+          setIserror(true);
+          resolve();
+        });
+    }
   };
+
+  const tableActions: any = [
+    {
+      icon: () => (
+        <Button
+          // onClick={(event) => props.action.onClick(event, props.data)}
+          variant={OUTLINED}
+          style={{ textTransform: 'none' }}
+          size='small'
+          className={classes.btnAction}
+        >
+          指名
+        </Button>
+      ),
+      tooltip: '指名',
+    },
+    {
+      icon: () => (
+        <Button
+          // onClick={(event) => props.action.onClick(event, props.data)}
+          variant={OUTLINED}
+          style={{ textTransform: 'none' }}
+          size='small'
+          className={classes.btnAction}
+        >
+          退勤
+        </Button>
+      ),
+      tooltip: '退勤',
+    },
+    {
+      icon: () => (
+        <Button
+          // onClick={(event) => props.action.onClick(event, props.data)}
+          variant={OUTLINED}
+          style={{ textTransform: 'none' }}
+          size='small'
+          className={classes.btnAction}
+        >
+          消除
+        </Button>
+      ),
+      tooltip: '消除',
+      onClick: (event: any, rowData: any) => {
+        new Promise((resolve) => {
+          handleRowDelete(rowData, resolve);
+        });
+      },
+    },
+  ];
 
   return (
     <div>
       <Container>
-        <Box mt="10px" pt="20px">
+        <Box mt='10px' pt='20px'>
           <Card className={classes.tableCard}>
-            <Box m="0.5em" p="0.5em">
-              <Typography variant="h4" component="h2">
-                TableList Component
-              </Typography>
+            <Box m='0.5em' p='0.5em'>
               <div>
                 {iserror && (
-                  <Alert severity="error">
+                  <Alert severity='error'>
                     {errorMessages.map((msg, i) => {
                       return <div key={i}>{msg}</div>;
                     })}
@@ -259,25 +314,27 @@ const TableM = () => {
                 )}
               </div>
               <MaterialTable
-                title="Material-Table data"
+                title='Material-Table data'
                 columns={tableColumns}
                 data={tableData}
+                actions={tableActions}
                 editable={{
                   onRowUpdate: (newData, oldData) =>
                     new Promise((resolve) => {
                       handleRowUpdate(newData, oldData as any, resolve);
                     }),
-                  onRowAdd: (newData) =>
-                    new Promise((resolve) => {
-                      handleRowAdd(newData, resolve);
-                    }),
-                  onRowDelete: (oldData) =>
-                    new Promise((resolve) => {
-                      handleRowDelete(oldData, resolve);
-                    }),
+                  // onRowAdd: (newData) =>
+                  //   new Promise((resolve) => {
+                  //     handleRowAdd(newData, resolve);
+                  //   }),
+                  // onRowDelete: (oldData) =>
+                  //   new Promise((resolve) => {
+                  //     handleRowDelete(oldData, resolve);
+                  //   }),
                 }}
                 options={{
                   actionsColumnIndex: -1,
+                  selection: true,
                 }}
               />
             </Box>
