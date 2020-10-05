@@ -93,9 +93,9 @@ const TableM = () => {
           <DateTimePicker
             autoOk
             ampm={false}
-            variant='inline'
-            margin='normal'
-            format='HH:mm:ss'
+            variant="inline"
+            margin="normal"
+            format="HH:mm:ss"
             // format='yyyy/MM/dd HH:mm:ss'
             value={props.value || null}
             onChange={props.onChange}
@@ -255,7 +255,7 @@ const TableM = () => {
           // onClick={(event) => props.action.onClick(event, props.data)}
           variant={OUTLINED}
           style={{ textTransform: 'none' }}
-          size='small'
+          size="small"
           className={classes.btnAction}
         >
           指名
@@ -269,7 +269,7 @@ const TableM = () => {
           // onClick={(event) => props.action.onClick(event, props.data)}
           variant={OUTLINED}
           style={{ textTransform: 'none' }}
-          size='small'
+          size="small"
           className={classes.btnAction}
         >
           退勤
@@ -283,7 +283,7 @@ const TableM = () => {
           // onClick={(event) => props.action.onClick(event, props.data)}
           variant={OUTLINED}
           style={{ textTransform: 'none' }}
-          size='small'
+          size="small"
           className={classes.btnAction}
         >
           消除
@@ -301,12 +301,12 @@ const TableM = () => {
   return (
     <div>
       <Container>
-        <Box mt='10px' pt='20px'>
+        <Box mt="10px" pt="20px">
           <Card className={classes.tableCard}>
-            <Box m='0.5em' p='0.5em'>
+            <Box m="0.5em" p="0.5em">
               <div>
                 {iserror && (
-                  <Alert severity='error'>
+                  <Alert severity="error">
                     {errorMessages.map((msg, i) => {
                       return <div key={i}>{msg}</div>;
                     })}
@@ -314,7 +314,7 @@ const TableM = () => {
                 )}
               </div>
               <MaterialTable
-                title='Material-Table data'
+                title="Material-Table data"
                 columns={tableColumns}
                 data={tableData}
                 actions={tableActions}
@@ -335,6 +335,7 @@ const TableM = () => {
                 options={{
                   actionsColumnIndex: -1,
                   selection: true,
+                  showSelectAllCheckbox: false,
                 }}
               />
             </Box>
