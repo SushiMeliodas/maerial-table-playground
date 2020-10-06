@@ -10,21 +10,10 @@ import useStyles from '../styles/AppStyles';
 //import Alert for Validation Message
 import Alert from '@material-ui/lab/Alert';
 //import for DatetimePicker related
-import {
-  MuiPickersUtilsProvider,
-  DateTimePicker,
-  TimePicker,
-} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
 import { format } from 'date-fns'; //Formater for date
 import DateFnsUtils from '@date-io/date-fns'; //Formater for DatetimePicker
-import {
-  CAlign,
-  CEdit,
-  CType,
-  Data,
-  CButtonColor,
-  CButtonVariant,
-} from '../types/Tstypes';
+import { CAlign, CEdit, CType, Data, CButtonVariant } from '../types/Tstypes';
 
 // interface DataVar {
 //   newData: Data[];
@@ -35,7 +24,7 @@ import {
 //Collumns string type
 const STRING: CType = 'string';
 const NUMERIC: CType = 'numeric';
-const DATETIME: CType = 'datetime';
+// const DATETIME: CType = 'datetime';
 const TIME: CType = 'time';
 // const DATE: CType = 'date';
 
@@ -44,7 +33,6 @@ const NEVER: CEdit = 'never';
 //Collumns align string type
 const LEFT: CAlign = 'left';
 //Button string type
-const PRIMARY: CButtonColor = 'primary';
 const OUTLINED: CButtonVariant = 'outlined';
 
 //Declare API url here
