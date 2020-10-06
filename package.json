@@ -18,7 +18,7 @@
     "@types/react-dom": "^16.9.8",
     "axios": "^0.20.0",
     "date-fns": "^2.16.1",
-    "material-table": "^1.69.0",
+    "material-table": "^1.67.0",
     "moment": "^2.29.0",
     "react": "^16.13.1",
     "react-avatar": "^3.9.7",

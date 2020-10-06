@@ -63,55 +63,146 @@ const TableM = () => {
   //Declaration for Material Styles
   const classes = useStyles();
 
-  //Table Collumn here
-  const [tableColumns] = useState([
-    {
-      title: 'ID',
-      field: 'product_id',
-      type: NUMERIC,
-      align: LEFT,
-      editable: NEVER,
-    },
-    { title: 'キャスト名', field: 'product_name', type: STRING },
-    { title: '区分', field: 'product_type', type: STRING },
-    {
-      title: 'Quantity',
-      field: 'product_quantity',
-      type: NUMERIC,
-      align: LEFT,
-    },
-    {
-      title: '予定時間',
-      field: 'product_datetime',
-      type: TIME,
-      // render: ({ product_datetime }: Data) => product_datetime,
-      editComponent: (props: any) => (
-        <MuiPickersUtilsProvider
-          utils={DateFnsUtils}
-          locale={props.dateTimePickerLocalization}
-        >
-          <DateTimePicker
-            autoOk
-            ampm={false}
-            variant="inline"
-            margin="normal"
-            format="HH:mm:ss"
-            // format='yyyy/MM/dd HH:mm:ss'
-            value={props.value || null}
-            onChange={props.onChange}
-            clearable
-            InputProps={{
-              style: {
-                fontSize: 13,
-              },
-            }}
-          />
-        </MuiPickersUtilsProvider>
-      ),
-    },
-    { title: 'Date 1', field: 'created_at', type: DATETIME, editable: NEVER },
-    { title: 'Date 2', field: 'updated_at', type: DATETIME, editable: NEVER },
-  ]);
+  // //Table Collumn here
+  // const [tableColumns] = useState([
+  //   {
+  //     title: 'ID',
+  //     field: 'product_id',
+  //     type: NUMERIC,
+  //     align: LEFT,
+  //     editable: NEVER,
+  //   },
+  //   { title: 'キャスト名', field: 'product_name', type: STRING },
+  //   { title: '区分', field: 'product_type', type: STRING },
+
+  //   {
+  //     title: '予定時間',
+  //     field: 'product_datetime',
+  //     type: TIME,
+  //     // render: ({ product_datetime }: Data) => product_datetime,
+  //     editComponent: (props: any) => (
+  //       <MuiPickersUtilsProvider
+  //         utils={DateFnsUtils}
+  //         locale={props.dateTimePickerLocalization}
+  //       >
+  //         <DateTimePicker
+  //           autoOk
+  //           ampm={false}
+  //           variant='inline'
+  //           margin='normal'
+  //           format='HH:mm'
+  //           // format='yyyy/MM/dd HH:mm:ss'
+  //           value={props.value || null}
+  //           onChange={props.onChange}
+  //           clearable
+  //           InputProps={{
+  //             style: {
+  //               fontSize: 13,
+  //             },
+  //           }}
+  //         />
+  //       </MuiPickersUtilsProvider>
+  //     ),
+  //   },
+  //   {
+  //     title: '打刻時間',
+  //     field: 'product_datetime_1',
+  //     type: TIME,
+  //     // editable: NEVER,
+  //     // render: ({ product_datetime }: Data) => product_datetime,
+  //     editComponent: (props: any) => (
+  //       <MuiPickersUtilsProvider
+  //         utils={DateFnsUtils}
+  //         locale={props.dateTimePickerLocalization}
+  //       >
+  //         <DateTimePicker
+  //           autoOk
+  //           ampm={false}
+  //           variant='inline'
+  //           margin='normal'
+  //           format='HH:mm'
+  //           // format='yyyy/MM/dd HH:mm:ss'
+  //           value={props.value || null}
+  //           onChange={props.onChange}
+  //           clearable
+  //           InputProps={{
+  //             style: {
+  //               fontSize: 13,
+  //             },
+  //           }}
+  //         />
+  //       </MuiPickersUtilsProvider>
+  //     ),
+  //   },
+  //   {
+  //     title: '出動時間',
+  //     field: 'product_datetime_2',
+  //     type: TIME,
+  //     // render: ({ product_datetime }: Data) => product_datetime,
+  //     editComponent: (props: any) => (
+  //       <MuiPickersUtilsProvider
+  //         utils={DateFnsUtils}
+  //         locale={props.dateTimePickerLocalization}
+  //       >
+  //         <DateTimePicker
+  //           autoOk
+  //           ampm={false}
+  //           variant='inline'
+  //           margin='normal'
+  //           format='HH:mm'
+  //           // format='yyyy/MM/dd HH:mm:ss'
+  //           value={props.value || null}
+  //           onChange={props.onChange}
+  //           clearable
+  //           InputProps={{
+  //             style: {
+  //               fontSize: 13,
+  //             },
+  //           }}
+  //         />
+  //       </MuiPickersUtilsProvider>
+  //     ),
+  //   },
+  //   {
+  //     title: '退動時間',
+  //     field: 'product_datetime_3',
+  //     type: TIME,
+  //     // render: ({ product_datetime }: Data) => product_datetime,
+  //     editComponent: (props: any) => (
+  //       <MuiPickersUtilsProvider
+  //         utils={DateFnsUtils}
+  //         locale={props.dateTimePickerLocalization}
+  //       >
+  //         <DateTimePicker
+  //           autoOk
+  //           ampm={false}
+  //           variant='inline'
+  //           margin='normal'
+  //           format='HH:mm'
+  //           // format='yyyy/MM/dd HH:mm:ss'
+  //           value={props.value || null}
+  //           onChange={props.onChange}
+  //           clearable
+  //           InputProps={{
+  //             style: {
+  //               fontSize: 13,
+  //             },
+  //           }}
+  //         />
+  //       </MuiPickersUtilsProvider>
+  //     ),
+  //   },
+  //   { title: '欠', field: 'product_status', type: STRING },
+  //   {
+  //     title: '遅刻',
+  //     field: 'product_quantity',
+  //     type: NUMERIC,
+  //     align: LEFT,
+  //   },
+  //   { title: '状態', field: 'product_status_1', type: STRING },
+  //   // { title: 'Date 1', field: 'created_at', type: DATETIME, editable: NEVER },
+  //   // { title: 'Date 2', field: 'updated_at', type: DATETIME, editable: NEVER },
+  // ]);
   const [tableData, setTableData] = useState([]); //table data
 
   //for error handling
@@ -255,7 +346,7 @@ const TableM = () => {
           // onClick={(event) => props.action.onClick(event, props.data)}
           variant={OUTLINED}
           style={{ textTransform: 'none' }}
-          size="small"
+          size='small'
           className={classes.btnAction}
         >
           指名
@@ -269,7 +360,7 @@ const TableM = () => {
           // onClick={(event) => props.action.onClick(event, props.data)}
           variant={OUTLINED}
           style={{ textTransform: 'none' }}
-          size="small"
+          size='small'
           className={classes.btnAction}
         >
           退勤
@@ -283,7 +374,7 @@ const TableM = () => {
           // onClick={(event) => props.action.onClick(event, props.data)}
           variant={OUTLINED}
           style={{ textTransform: 'none' }}
-          size="small"
+          size='small'
           className={classes.btnAction}
         >
           消除
@@ -301,12 +392,12 @@ const TableM = () => {
   return (
     <div>
       <Container>
-        <Box mt="10px" pt="20px">
+        <Box mt='10px' pt='20px'>
           <Card className={classes.tableCard}>
-            <Box m="0.5em" p="0.5em">
+            <Box m='0.5em' p='0.5em'>
               <div>
                 {iserror && (
-                  <Alert severity="error">
+                  <Alert severity='error'>
                     {errorMessages.map((msg, i) => {
                       return <div key={i}>{msg}</div>;
                     })}
@@ -314,8 +405,144 @@ const TableM = () => {
                 )}
               </div>
               <MaterialTable
-                title="Material-Table data"
-                columns={tableColumns}
+                title='Material-Table data'
+                columns={[
+                  {
+                    title: 'ID',
+                    field: 'product_id',
+                    type: NUMERIC,
+                    align: LEFT,
+                    editable: NEVER,
+                  },
+                  { title: 'キャスト名', field: 'product_name', type: STRING },
+                  { title: '区分', field: 'product_type', type: STRING },
+
+                  {
+                    title: '予定時間',
+                    field: 'product_datetime',
+                    type: TIME,
+                    // render: ({ product_datetime }: Data) => product_datetime,
+                    editComponent: (props: any) => (
+                      <MuiPickersUtilsProvider
+                        utils={DateFnsUtils}
+                        locale={props.dateTimePickerLocalization}
+                      >
+                        <DateTimePicker
+                          autoOk
+                          ampm={false}
+                          variant='inline'
+                          margin='normal'
+                          format='HH:mm'
+                          // format='yyyy/MM/dd HH:mm:ss'
+                          value={props.value || null}
+                          onChange={props.onChange}
+                          clearable
+                          InputProps={{
+                            style: {
+                              fontSize: 13,
+                            },
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                    ),
+                  },
+                  {
+                    title: '打刻時間',
+                    field: 'product_datetime_1',
+                    type: TIME,
+                    // editable: NEVER,
+                    // render: ({ product_datetime }: Data) => product_datetime,
+                    editComponent: (props: any) => (
+                      <MuiPickersUtilsProvider
+                        utils={DateFnsUtils}
+                        locale={props.dateTimePickerLocalization}
+                      >
+                        <DateTimePicker
+                          autoOk
+                          ampm={false}
+                          variant='inline'
+                          margin='normal'
+                          format='HH:mm'
+                          // format='yyyy/MM/dd HH:mm:ss'
+                          value={props.value || null}
+                          onChange={props.onChange}
+                          clearable
+                          InputProps={{
+                            style: {
+                              fontSize: 13,
+                            },
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                    ),
+                  },
+                  {
+                    title: '出動時間',
+                    field: 'product_datetime_2',
+                    type: TIME,
+                    // render: ({ product_datetime }: Data) => product_datetime,
+                    editComponent: (props: any) => (
+                      <MuiPickersUtilsProvider
+                        utils={DateFnsUtils}
+                        locale={props.dateTimePickerLocalization}
+                      >
+                        <DateTimePicker
+                          autoOk
+                          ampm={false}
+                          variant='inline'
+                          margin='normal'
+                          format='HH:mm'
+                          // format='yyyy/MM/dd HH:mm:ss'
+                          value={props.value || null}
+                          onChange={props.onChange}
+                          clearable
+                          InputProps={{
+                            style: {
+                              fontSize: 13,
+                            },
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                    ),
+                  },
+                  {
+                    title: '退動時間',
+                    field: 'product_datetime_3',
+                    type: TIME,
+                    // render: ({ product_datetime }: Data) => product_datetime,
+                    editComponent: (props: any) => (
+                      <MuiPickersUtilsProvider
+                        utils={DateFnsUtils}
+                        locale={props.dateTimePickerLocalization}
+                      >
+                        <DateTimePicker
+                          autoOk
+                          ampm={false}
+                          variant='inline'
+                          margin='normal'
+                          format='HH:mm'
+                          // format='yyyy/MM/dd HH:mm:ss'
+                          value={props.value || null}
+                          onChange={props.onChange}
+                          clearable
+                          InputProps={{
+                            style: {
+                              fontSize: 13,
+                            },
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                    ),
+                  },
+                  { title: '欠', field: 'product_status', type: STRING },
+                  {
+                    title: '遅刻',
+                    field: 'product_quantity',
+                    type: NUMERIC,
+                    align: LEFT,
+                  },
+                  { title: '状態', field: 'product_status_1', type: STRING },
+                ]}
                 data={tableData}
                 actions={tableActions}
                 editable={{
@@ -323,10 +550,10 @@ const TableM = () => {
                     new Promise((resolve) => {
                       handleRowUpdate(newData, oldData as any, resolve);
                     }),
-                  // onRowAdd: (newData) =>
-                  //   new Promise((resolve) => {
-                  //     handleRowAdd(newData, resolve);
-                  //   }),
+                  onRowAdd: (newData) =>
+                    new Promise((resolve) => {
+                      handleRowAdd(newData, resolve);
+                    }),
                   // onRowDelete: (oldData) =>
                   //   new Promise((resolve) => {
                   //     handleRowDelete(oldData, resolve);
